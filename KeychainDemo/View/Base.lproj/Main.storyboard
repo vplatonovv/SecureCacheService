@@ -110,7 +110,6 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="read:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G5s-nZ-TqN"/>
                                             <segue destination="hpn-cN-Tvv" kind="show" id="ZNS-zF-rYh"/>
                                         </connections>
                                     </button>
@@ -137,7 +136,13 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7H8-q5-7Ag" secondAttribute="trailing" constant="100" id="zw0-tu-m6c"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="vBe-MR-6cd"/>
+                    <navigationItem key="navigationItem" id="vBe-MR-6cd">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="G2P-Ot-cz8">
+                            <connections>
+                                <action selector="trashButtonTapped:" destination="BYZ-38-t0r" id="01B-Wj-m35"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="emailTF" destination="0oE-ze-PWN" id="UW4-50-qCL"/>
                         <outlet property="nameTF" destination="ZGC-NJ-0XR" id="itc-OW-fuc"/>

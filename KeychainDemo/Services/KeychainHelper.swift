@@ -67,4 +67,14 @@ final public class KeychainHelper: _KeychainHelper {
         print("🔥🔥🔥 read from keychain")
         return passport
     }
+    
+    func clearAll() -> Bool {
+        let query: [String: Any] = [kSecClass as String : kSecClassGenericPassword]
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == 0 else {
+            print("😢😢😢 cannot to delete all values")
+            return false
+        }
+        return status == noErr
+    }
 }

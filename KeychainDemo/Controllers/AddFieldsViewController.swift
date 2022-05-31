@@ -42,7 +42,7 @@ class AddFieldsViewController: UIViewController {
               let email = emailTF.text, !email.isEmpty,
               let passport = passportTF.text, !passport.isEmpty,
               let phone = phoneTF.text, !phone.isEmpty else {
-            print("fill all fields")
+            showAlert(with: "Need all fields", and: "Enter the data to all fields 🔥")
             return nil
         }
         let user = User(name: name, password: pass, email: email, passport: passport, phone: phone)
@@ -57,13 +57,24 @@ class AddFieldsViewController: UIViewController {
         phoneTF.text = ""
     }
     
+    private func showAlert(with title: String, and message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .default)
+        alert.addAction(ok)
+        self.present(alert, animated: true)
+    }
+    
     @IBAction func save(_ sender: Any) {
         guard let user = setupUserFromTextFields() else { return }
         cacheService.addUserToCache(user)
         clearAllFields()
     }
     
-    @IBAction func read(_ sender: Any) {
-        
+    @IBAction func trashButtonTapped(_ sender: UIBarButtonItem) {
+        if cacheService.deleteAll() {
+            showAlert(with: "Removed", and: "All stories in ud and keychain was removing 😎")
+        } else {
+            showAlert(with: "Error", and: "Something wrong, ask to developer 🤷‍♂️")
+        }
     }
 }

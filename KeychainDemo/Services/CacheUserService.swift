@@ -12,8 +12,6 @@ protocol _CacheUserService: AnyObject {
     func getUsersFromCache() -> [User]
 }
 
-// TODO: Remove force cast!
-
 final class CacheUserService: _CacheUserService {
     private let userDefaults: UserDefaults = UserDefaults.standard
     private let keychainHelper: KeychainHelper = KeychainHelper()
@@ -40,15 +38,21 @@ final class CacheUserService: _CacheUserService {
         var users: [User] = []
         if let cachedUsers = UserDefaults.standard.object(forKey: "key") as? [Data] {
             cachedUsers.forEach { cachedUser in
-                var user = User(data: cachedUser)
-                let passport = keychainHelper.read(forKey: user!.key)
-                user?.passport = passport
-                users.append(user!)
+                if var user = User(data: cachedUser) {
+                    let passport = keychainHelper.read(forKey: user.key)
+                    user.passport = passport
+                    users.append(user)
+                }
             }
         } else {
             print("something wrong")
         }
         return users
+    }
+    
+    func deleteAll() -> Bool {
+        UserDefaults.standard.removeObject(forKey: "key")
+        return keychainHelper.clearAll()
     }
     
     private func existUserInCache(_ user: User) -> Bool {
