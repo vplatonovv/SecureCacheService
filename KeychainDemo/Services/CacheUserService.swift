@@ -45,7 +45,7 @@ final class CacheUserService: _CacheUserService {
                 }
             }
         } else {
-            print("something wrong")
+            print("empty")
         }
         return users
     }

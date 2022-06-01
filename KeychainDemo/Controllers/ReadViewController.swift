@@ -9,8 +9,8 @@ import UIKit
 
 class ReadViewController: UIViewController {
     
-    let cacheService = CacheUserService()
-    var users: [User] = []
+    private let cacheService = CacheUserService()
+    private var users: [User] = []
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -34,15 +34,21 @@ class ReadViewController: UIViewController {
 extension ReadViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        users.count
+        return users.isEmpty ? 1 : users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let user = users[indexPath.row]
         var content = cell.defaultContentConfiguration()
-        content.text = getFullDescriptionOf(user: user, by: indexPath)
-        content.secondaryText = "secret passport - \(user.passport)"
+        if users.isEmpty {
+            content.text = "No users"
+            content.textProperties.alignment = .center
+            tableView.separatorColor = .clear
+        } else {
+            let user = users[indexPath.row]
+            content.text = getFullDescriptionOf(user: user, by: indexPath)
+            content.secondaryText = "secret passport - \(user.passport)"
+        }
         cell.contentConfiguration = content
         return cell
     }
