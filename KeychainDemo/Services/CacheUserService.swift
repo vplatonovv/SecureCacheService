@@ -7,12 +7,13 @@
 
 import Foundation
 
-protocol _CacheUserService: AnyObject {
+protocol DefaultCacheService: AnyObject {
     func addUserToCache(_ user: User)
     func getUsersFromCache() -> [User]
+    func deleteAll() -> Bool
 }
 
-final class CacheUserService: _CacheUserService {
+final class CacheUserService: DefaultCacheService {
     private let userDefaults: UserDefaults = UserDefaults.standard
     private let keychainHelper: KeychainHelper = KeychainHelper()
     
@@ -26,11 +27,17 @@ final class CacheUserService: _CacheUserService {
             if !existUserInCache(_user) {
                 cachedUsersData.append(data)
                 UserDefaults.standard.set(cachedUsersData, forKey: "key")
-                keychainHelper.save(value: user.passport, forKey: keyForKeychain)
+                guard let result = try? keychainHelper.save(value: user.passport, forKey: keyForKeychain) else {
+                    return
+                }
+                print("ADD TO CACHE WITH RESULT - \(result)")
             }
         } else {
             UserDefaults.standard.set([data], forKey: "key")
-            keychainHelper.save(value: user.passport, forKey: keyForKeychain)
+            guard let result = try? keychainHelper.save(value: user.passport, forKey: keyForKeychain) else {
+                return
+            }
+            print("ADD TO CACHE WITH RESULT - \(result)")
         }
     }
     
@@ -39,7 +46,9 @@ final class CacheUserService: _CacheUserService {
         if let cachedUsers = UserDefaults.standard.object(forKey: "key") as? [Data] {
             cachedUsers.forEach { cachedUser in
                 if var user = User(data: cachedUser) {
-                    let passport = keychainHelper.read(forKey: user.key)
+                    guard let passport = try? keychainHelper.read(forKey: user.key) else {
+                        return
+                    }
                     user.passport = passport
                     users.append(user)
                 }
@@ -52,7 +61,8 @@ final class CacheUserService: _CacheUserService {
     
     func deleteAll() -> Bool {
         UserDefaults.standard.removeObject(forKey: "key")
-        return keychainHelper.clearAll()
+        guard let result = try? keychainHelper.clearAll() else { return false }
+        return result
     }
     
     private func existUserInCache(_ user: User) -> Bool {

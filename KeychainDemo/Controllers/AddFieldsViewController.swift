@@ -9,7 +9,7 @@ import UIKit
 
 class AddFieldsViewController: UIViewController {
     
-    let cacheService = CacheUserService()
+    let cacheService: DefaultCacheService = CacheUserService()
     
     @IBOutlet weak var nameTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
@@ -50,11 +50,7 @@ class AddFieldsViewController: UIViewController {
     }
     
     private func clearAllFields() {
-        nameTF.text = ""
-        passwordTF.text = ""
-        emailTF.text = ""
-        passportTF.text = ""
-        phoneTF.text = ""
+        [nameTF, passportTF, emailTF, passportTF, phoneTF].forEach { $0?.text = "" }
     }
     
     private func showAlert(with title: String, and message: String) {
@@ -74,7 +70,7 @@ class AddFieldsViewController: UIViewController {
         if cacheService.deleteAll() {
             showAlert(with: "Removed", and: "All stories in ud and keychain was removing 😎")
         } else {
-            showAlert(with: "Error", and: "Something wrong, ask to developer 🤷‍♂️")
+            showAlert(with: "Error", and: "Probably cache is empty 🤷‍♂️")
         }
     }
 }

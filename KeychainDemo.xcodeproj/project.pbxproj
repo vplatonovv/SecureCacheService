@@ -23,7 +23,6 @@
 		9520323D283E27030096799E /* CacheUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheUserService.swift; sourceTree = "<group>"; };
 		95224B66283E23B100FB4CD5 /* ReadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadViewController.swift; sourceTree = "<group>"; };
 		9560F96C2845145000914D6A /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
-		956D96F528467BF10060B5F2 /* KeychainDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = KeychainDemo.app; path = "/Users/slavaplatonov/Desktop/KeychainDemo/build/Debug-iphoneos/KeychainDemo.app"; sourceTree = "<absolute>"; };
 		95857D43284518A9003816CF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		95CA93B7283CF34C00827CFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		95CA93B9283CF34C00827CFA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +31,7 @@
 		95CA93C0283CF34E00827CFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		95CA93C3283CF34E00827CFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		95CA93C5283CF34E00827CFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		95FCB919286F946C0047BE30 /* KeychainDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = KeychainDemo.app; path = "/Users/slavaplatonov/Desktop/KeychainDemo/build/Debug-iphoneos/KeychainDemo.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +127,7 @@
 			);
 			name = KeychainDemo;
 			productName = KeychainDemo;
-			productReference = 956D96F528467BF10060B5F2 /* KeychainDemo.app */;
+			productReference = 95FCB919286F946C0047BE30 /* KeychainDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

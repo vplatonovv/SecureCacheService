@@ -8,20 +8,22 @@
 import Foundation
 
 protocol _KeychainHelper: AnyObject {
-    func save(value: String, forKey: String)
-    func read(forKey: String) -> String
+    func save(value: String, forKey: String) throws -> Bool
+    func read(forKey: String) throws -> String
+    func clearAll() throws -> Bool
 }
-
-// TODO: Error throws in keychain helper, return bools for keychain methods
 
 final public class KeychainHelper: _KeychainHelper {
     
-    enum KeychainErrors {
-        
+    enum KeychainErrors: Error {
+        case itemNotFound
+        case badSuccess
+        case badData
+        case genericError(OSStatus)
     }
         
-    func save(value: String, forKey: String) {
-        guard let data = value.data(using: .utf8) else { return }
+    func save(value: String, forKey: String) throws -> Bool {
+        guard let data = value.data(using: .utf8) else { return false }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: forKey,
@@ -30,14 +32,13 @@ final public class KeychainHelper: _KeychainHelper {
         
         let status = SecItemAdd(query as CFDictionary, nil)
         guard status == 0 else {
-            print("😢😢😢 SAVE ERROR")
-            print(SecCopyErrorMessageString(status, nil)!)
-            return
+            throw KeychainErrors.genericError(status)
         }
         print("🔥🔥🔥 saved to keychain")
+        return status == noErr
     }
     
-    func read(forKey: String) -> String {
+    func read(forKey: String) throws -> String {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: forKey,
@@ -49,31 +50,25 @@ final public class KeychainHelper: _KeychainHelper {
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         guard status != errSecItemNotFound else {
-            print("😢😢😢 item not found")
-            return ""
+            throw KeychainErrors.itemNotFound
         }
         guard status == errSecSuccess else {
-            print("😢😢😢 bad access")
-            print(SecCopyErrorMessageString(status, nil)!)
-            return ""
+            throw KeychainErrors.badSuccess
         }
         guard let existingItem = item as? [String : Any],
               let secureValue = existingItem[kSecValueData as String] as? Data,
               let passport = String(data: secureValue, encoding: .utf8) else {
-            print("😢😢😢 cannot converte")
-            print(SecCopyErrorMessageString(status, nil)!)
-            return ""
+            throw KeychainErrors.badData
         }
         print("🔥🔥🔥 read from keychain")
         return passport
     }
     
-    func clearAll() -> Bool {
+    func clearAll() throws -> Bool {
         let query: [String: Any] = [kSecClass as String : kSecClassGenericPassword]
         let status = SecItemDelete(query as CFDictionary)
         guard status == 0 else {
-            print("😢😢😢 cannot to delete all values")
-            return false
+            throw KeychainErrors.genericError(status)
         }
         return status == noErr
     }
